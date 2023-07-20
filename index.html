@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Изучение Английского</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: url('frus.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+    #word-display {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: white; /* Цвет текста */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Тень текста */
+        background-color: rgba(0, 0, 0, 0.7); /* Цвет фона текста */
+        padding: 10px; /* Добавление отступов вокруг текста */
+        border-radius: 5px; /* Закругление углов фона текста */
+    }
+
+    .option {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: background 0.3s;
+        background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background for readability */
+    }
+
+    .option:hover {
+        background-color: rgba(240, 240, 240, 0.8);
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background for readability */
+    }
+
+    h1 {
+        background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background for readability */
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+</style>
+<style>
+#remembered-words-container {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 200px;
+    overflow-y: auto;
+}
+
+#remembered-words-list {
+    list-style-type: none;
+    padding: 0;
+}
+</style></head>
+<body>
+<h1>Изучение Английского</h1>
+<div id="word-display">apple</div>
+<div class="option" id="option1" onclick="checkAnswer(this);">яблоко</div>
+<div class="option" id="option2" onclick="checkAnswer(this);">груша</div>
+<div class="option" id="option3" onclick="checkAnswer(this);">банан</div>
+<div class="option" id="option4" onclick="checkAnswer(this);">апельсин</div>
+<br/>
+<button onclick="rememberWord()">Запомнил</button>
+<button onclick="showRememberedWords()">Запомненные слова</button>
+<script>
+    let words = [{'english': 'house', 'translation': 'дом'}, {'english': 'car', 'translation': 'машина'}, {'english': 'tree', 'translation': 'дерево'}, {'english': 'book', 'translation': 'книга'}, {'english': 'phone', 'translation': 'телефон'}, {'english': 'computer', 'translation': 'компьютер'}, {'english': 'city', 'translation': 'город'}, {'english': 'food', 'translation': 'еда'}, {'english': 'water', 'translation': 'вода'}, {'english': 'animal', 'translation': 'животное'}, {'english': 'cat', 'translation': 'кошка'}, {'english': 'dog', 'translation': 'собака'}, {'english': 'bird', 'translation': 'птица'}, {'english': 'fish', 'translation': 'рыба'}, {'english': 'mouse', 'translation': 'мышь'}, {'english': 'sea', 'translation': 'море'}, {'english': 'mountain', 'translation': 'гора'}, {'english': 'apple', 'translation': 'яблоко'}, {'english': 'banana', 'translation': 'банан'}, {'english': 'orange', 'translation': 'апельсин'}, {'english': 'pear', 'translation': 'груша'}];
+    let currentWordIndex = 0;
+
+    function resetColors() {
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById("option" + i).style.background = "";
+        }
+    }
+
+    function displayWord() {
+        resetColors();
+        const wordDisplay = document.getElementById("word-display");
+        wordDisplay.textContent = words[currentWordIndex].english;
+        
+        // Randomly shuffle the options
+        const options = [words[currentWordIndex].translation, "яблоко", "банан", "апельсин"].sort(() => 0.5 - Math.random());
+        for (let i = 0; i < 4; i++) {
+            document.getElementById("option" + (i+1)).textContent = options[i];
+        }
+    }
+
+    function checkAnswer(element) {
+        if (element.textContent === words[currentWordIndex].translation) {
+            element.style.background = "#4CAF50";
+            currentWordIndex++;
+            if (currentWordIndex >= words.length) {
+                currentWordIndex = 0;
+            }
+            setTimeout(displayWord, 1000);  // Wait for 1 second and then display next word
+        } else {
+            element.style.background = "#f44336";
+        }
+    }
+    
+    let rememberedWords = [];
+
+    function rememberWord() {
+        rememberedWords.push(words[currentWordIndex]);
+        words.splice(currentWordIndex, 1);
+        if (currentWordIndex >= words.length) {
+            currentWordIndex = 0;
+        }
+        displayWord();
+    }
+
+    function showRememberedWords() {
+        
+const list = document.getElementById("remembered-words-list");
+list.innerHTML = ''; // Очистите текущий список
+rememberedWords.forEach(word => {
+    const listItem = document.createElement('li');
+    listItem.textContent = word.english;
+    list.appendChild(listItem);
+});
+
+    }
+
+    displayWord();
+</script>
+<div id="remembered-words-container"><h2>Запомненные слова:</h2><ul id="remembered-words-list"></ul></div></body>
+</html>
